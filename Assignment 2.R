@@ -1,0 +1,12 @@
+r = getOption("repos")
+r["CRAN"] = "http://cran.us.r-project.org"
+options(repos = r)
+install.packages("pastecs")
+library(pastecs)
+new<-read.csv("..USStates.csv", sep=",", header=T)
+head(new)
+stat.desc(new)
+install.packages("skimr")
+library(skimr)
+skim(stat.desc(new))
+skim(new)

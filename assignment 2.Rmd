@@ -1,0 +1,140 @@
+---
+title: "Assignment 2"
+author: "Sonny Desai"
+date: "4/18/2021"
+output: pdf_document
+---
+
+```{r}
+getwd()
+```
+```{r}
+r = getOption("repos")
+r["CRAN"] = "http://cran.us.r-project.org"
+options(repos = r)
+```
+```{r}
+install.packages("pastecs")
+library(pastecs)
+```
+
+```{r}
+setwd("C:/Users/sonny.desai/Downloads")
+```
+
+```{r}
+new<-read.csv("USStates.csv", sep=",", header=T)
+head(new)
+```
+```{r}
+stat.desc(new)
+```
+```{r}
+install.packages("skimr")
+library(skimr)
+```
+```{r}
+skim(new)
+```
+```{r}
+install.packages("ggpubr")
+```
+```{r}
+library(ggpubr)
+```
+```{r}
+library(ggplot2)
+library(grid)
+library(gridExtra)
+```
+```{r}
+p1 <- qplot(Region, HouseholdIncome, data = new)
+p2 <- qplot(Population, HouseholdIncome, data = new)
+p3 <- qplot(HighSchool, HouseholdIncome, data = new)
+p4 <- qplot(College, HouseholdIncome, data = new)
+p5 <- qplot(Smokers, HouseholdIncome, data = new)
+p6 <- qplot(PhysicalActivity, HouseholdIncome, data = new)
+p7 <- qplot(Obese, HouseholdIncome, data = new)
+p8 <- qplot(NonWhite, HouseholdIncome, data = new)
+p9 <- qplot(Smokers, HouseholdIncome, data = new)
+p10 <- qplot(HeavyDrinkers, HouseholdIncome, data = new)
+p11 <- qplot(TwoParents, HouseholdIncome, data = new)
+p12 <- qplot(Insured, HouseholdIncome, data = new)
+grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, p8, p10, p11, p12, nrow = 3, ncol = 4)
+
+```
+```{r}
+library(dplyr)
+```
+
+```{r}
+x<- select(new, HighSchool, College, Smokers, PhysicalActivity, Obese, NonWhite, HeavyDrinkers, TwoParents, Insured)
+y<- select(new, HouseholdIncome)
+cor(x,y, method="pearson")
+```
+```{r}
+model1 = lm(HouseholdIncome~College, data=new)
+summary(model1)
+```
+```{r}
+b<-anova(model1)
+b
+```
+```{r}
+a<-aov(HouseholdIncome~College, new)
+a
+```
+```{r}
+install.packages("vtable")
+library(vtable)
+```
+
+```{r}
+install.packages("janitor")
+library(janitor)
+```
+```{r}
+lapply(b, function(x) adorn_totals(dat = b, where = "row"))
+```
+```{r}
+summary(model1)$r.square
+```
+```{r}
+ssr = sum((fitted(model1) - new$HouseholdIncome)^2)
+ssr
+```
+```{r}
+model2 = lm(HouseholdIncome~College + Insured, data=new)
+summary(model2)
+```
+```{r}
+anova(model2)
+```
+```{r}
+aov(HouseholdIncome~College + Insured, new)
+```
+```{r}
+x2<- select(new, HighSchool, College, Smokers, PhysicalActivity, Obese, NonWhite, HeavyDrinkers, TwoParents, Insured, HouseholdIncome)
+```
+
+```{r}
+mod_summary <- summary(lm(HouseholdIncome ~ ., x2))
+mod_summary
+```
+```{r}
+college = model1
+college
+```
+```{r}
+model3 = lm(HouseholdIncome~College + Smokers, data=new)
+summary(model3)
+```
+```{r}
+anova(model3)
+```
+```{r}
+ggplot(new, aes(HouseholdIncome, College, colour = Region)) + 
+  geom_point()
+```
+
+
